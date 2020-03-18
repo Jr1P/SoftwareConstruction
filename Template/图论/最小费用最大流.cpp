@@ -1,0 +1,82 @@
+#include <cstdio>
+#include <queue>
+#include <algorithm>
+#include <cstring>
+#define N 5050
+#define M 50050
+#define INF 0x3fffffff
+
+struct Edge {
+    int u, v, next, flow, cost; // cost 单位流量费用, flow 最大流量
+    Edge() {}
+    Edge(int u, int v, int next, int flow, int cost)
+        : u(u), v(v), next(next), flow(flow), cost(cost) {}
+} e[M << 1];
+
+int n, m, s, t, cnt = 0;
+int head[N], dis[N], pre[N], a[N];
+bool inque[N];
+
+inline int min(int x, int y) { return x < y ? x : y; }
+
+inline void add(int u, int v, int flow, int cost) {
+    e[cnt] = Edge(u, v, head[u], flow, cost);
+    head[u] = cnt++;
+}
+
+bool SPFA(int s, int t) {
+    std::queue<int> q;
+    for (int i = 1; i <= n; i++) {
+        dis[i] = INF;
+        inque[i] = false;
+    }
+    a[s] = INF;
+    q.push(s);
+    pre[s] = dis[s] = 0;
+    inque[s] = true;
+    while (!q.empty()) {
+        int now = q.front();
+        q.pop(); inque[now] = false;
+        for (int i = head[now]; i != -1; i = e[i].next) {
+            int v = e[i].v;
+            if (dis[now] + e[i].cost < dis[v] && e[i].flow > 0) {
+                dis[v] = dis[now] + e[i].cost;
+                pre[v] = i;
+                a[v] = min(a[now], e[i].flow);
+                if (!inque[v]) {
+                    q.push(v);
+                    inque[v] = true;
+                }
+            }
+        }
+    }    
+    return dis[t] != INF;
+}
+
+int MCMF() {
+    int flow = 0, cost = 0;
+    while (SPFA(s, t)) {
+        flow += a[t];
+        cost += dis[t] * a[t];
+        int u = t;
+        while (u != s) {
+            e[pre[u]].flow -= a[t];
+            e[pre[u] ^ 1].flow += a[t];
+            u = e[pre[u]].u;
+        }
+    }
+    printf("%d %d\n", flow, cost);
+}
+
+int main() {
+    memset(head, -1, sizeof(head));
+    scanf("%d%d%d%d", &n, &m, &s, &t);
+    for (int i = 1; i <= m; i++) {
+        int u, v, flow, cost;
+        scanf("%d%d%d%d", &u, &v, &flow, &cost);
+        add(u, v, flow, cost);
+        add(v, u, 0, -cost);
+    }
+    MCMF();
+    return 0;
+}

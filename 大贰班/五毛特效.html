@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>五毛特效</title>
+	<meta http-equiv="Content-Type" content="text/html; charset = utf-8">
+	<style type="text/css">
+		html {
+			padding: 0;
+			margin: 0;
+		}
+
+		body {
+			background-color: #A8A8A8;
+			padding: 5px 5px;
+		}
+
+		#dd {
+			font-family: "华文行楷", KaiTi;
+			display: block;
+			position: absolute;
+			bottom: 5%;
+			width: 99%;
+			text-align: center;
+			font-size: 33px;
+			opacity: 0;
+		}
+
+		#card {
+			position: absolute;
+			z-index: 1001;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+			animation: emerge 2s ease-in-out 1;
+			-webkit-animation: emerge 2s ease-in-out 1;
+		}
+
+		#card:hover {
+			cursor: pointer;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+		}
+
+		#logo1 {
+			display: none;
+			position: absolute;
+			z-index: 1002;
+			top: 47.5%;
+			left: 49.5%;
+			transform: translate(-50%, -50%) rotateY(180deg);
+			-webkit-transform: translate(-50%, -50%) rotateY(180deg);
+		}
+
+		#specialefficiency {
+			border-radius: 10px;
+			display: none;
+			position: absolute;
+			z-index: 1001;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+		}
+
+		#saber {
+			display: none;
+			position: absolute;
+			clip: rect(0px, 237px, 312px, 0px);
+			z-index: 1003;
+			top: 47.5%;
+			left: 49.3%;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+		}
+
+		#saber1 {
+			display: none;
+			position: absolute;
+			z-index: 1002;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+			top: 47.5%;
+			left: 49.3%;
+		}
+
+		#sp1 {
+			display: none;
+			position: absolute;
+			z-index: 1004;
+			transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+			top: 50%;
+			left: 51%;
+		}
+
+		@keyframes emerge {
+			0% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+
+		@-webkit-keyframes emerge {
+			0% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+
+		@keyframes emerge1 {
+			0% {
+				opacity: .4;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+
+		@-webkit-keyframes emerge1 {
+			0% {
+				opacity: .4;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+
+		@keyframes fade {
+			0% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0;
+			}
+		}
+
+		@-webkit-keyframes fade {
+			0% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0;
+			}
+		}
+
+		@keyframes spin {
+			0% {
+				transform: translate(-50%, -50%) rotateY(0deg);
+				z-index: 1003;
+			}
+
+			50% {
+				transform: translate(-50%, -50%) rotateY(180deg);
+				z-index: 1002;
+			}
+
+			100% {
+				transform: translate(-50%, -50%) rotateY(360deg);
+				z-index: 1003;
+			}
+		}
+
+		@-webkit-keyframes spin {
+			0% {
+				transform: translate(-50%, -50%) rotateY(0deg);
+				z-index: 1003;
+			}
+
+			50% {
+				transform: translate(-50%, -50%) rotateY(180deg);
+				z-index: 1002;
+			}
+
+			100% {
+				transform: translate(-50%, -50%) rotateY(360deg);
+				z-index: 1003;
+			}
+		}
+
+		@keyframes spin1 {
+			0% {
+				transform: translate(-50%, -50%) rotateY(0deg);
+				z-index: 1002;
+			}
+
+			50% {
+				transform: translate(-50%, -50%) rotateY(180deg);
+				z-index: 1003;
+			}
+
+			100% {
+				transform: translate(-50%, -50%) rotateY(360deg);
+				z-index: 1002;
+			}
+		}
+
+		@-webkit-keyframes spin1 {
+			0% {
+				transform: translate(-50%, -50%) rotateY(0deg);
+				z-index: 1002;
+			}
+
+			50% {
+				transform: translate(-50%, -50%) rotateY(180deg);
+				z-index: 1003;
+			}
+
+			100% {
+				transform: translate(-50%, -50%) rotateY(360deg);
+				z-index: 1002;
+			}
+		}
+
+		@keyframes clip {
+			0% {
+				clip: rect(0px, 237px, 312px, 0px);
+			}
+
+			10% {
+				clip: rect(0px, 237px, 308px, 0px);
+			}
+
+			18% {
+				clip: rect(0px, 237px, 300px, 0px);
+			}
+
+			36% {
+				clip: rect(0px, 237px, 240px, 0px);
+			}
+
+			69% {
+				clip: rect(0px, 237px, 0px, 0px);
+			}
+
+			100% {
+				clip: rect(0px, 237px, 0px, 0px);
+			}
+		}
+
+		@-webkit-keyframes clip {
+			0% {
+				clip: rect(0px, 237px, 312px, 0px);
+			}
+
+			10% {
+				clip: rect(0px, 237px, 308px, 0px);
+			}
+
+			18% {
+				clip: rect(0px, 237px, 300px, 0px);
+			}
+
+			36% {
+				clip: rect(0px, 237px, 240px, 0px);
+			}
+
+			69% {
+				clip: rect(0px, 237px, 0px, 0px);
+			}
+
+			100% {
+				clip: rect(0px, 237px, 0px, 0px);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<img alt="" src="Hearthstone6.gif" id="card" />
+	<img alt="" src="slow_sp.gif" id="specialefficiency" />
+	<img alt="" src="Hearthstone4.gif" id="logo1" />
+	<img alt="" src="saber.png" id="saber" />
+	<img alt="" src="saber1.jpg" id="saber1" />
+	<img alt="" src="slow_sp1.gif" id="sp1" />
+	<div id="dd">@经费传说↑↑</div>
+	<script type="text/javascript">
+		var logo1 = document.getElementById("logo1");
+		var card = document.getElementById("card");
+		var sp = document.getElementById("specialefficiency");
+		var saber = document.getElementById("saber");
+		var dd = document.getElementById("dd");
+		var sp1 = document.getElementById("sp1");
+		card.onclick = function () {
+			setTimeout(function () {
+				sp.style.display = "block";
+				sp.style.animation = "emerge1 1s ease-in-out 1";
+				dd.style.animation = "emerge1 1.4s ease-in-out 2 alternate";
+				sp.style.webkitAnimation = "emerge1 1s ease-in-out 1";
+				dd.style.webkitAnimation = "emerge1 1.4s ease-in-out 2 alternate";
+			}, 1500);
+			setTimeout(function () { card.style.display = "none"; }, 1900);
+			setTimeout(function () {
+				sp.style.animation = "fade 1s ease-in-out 1";
+				sp.style.webkitAnimation = "fade 1s ease-in-out 1";
+			}, 3800);
+			setTimeout(function () {
+				saber.style.display = "block";
+				saber1.style.display = "block";
+				saber.style.animation = "spin 1s linear 2";
+				saber1.style.animation = "spin1 1s linear 2";
+				saber.style.webkitAnimation = "spin 1s linear 2";
+				saber1.style.webkitAnimation = "spin1 1s linear 2";
+			}, 4000);
+			setTimeout(function () { sp.style.display = "none"; }, 4700);
+			setTimeout(function () {
+				saber.style.animationTimingFunction = "cubic-bezier(.48,1.65,1,1)";
+				saber.style.animationDuration = "2s";
+				saber1.style.animationTimingFunction = "cubic-bezier(.48,1.65,1,1)";
+				saber1.style.webkitAnimationDuration = "2s";
+
+				saber.style.webkitAnimationTimingFunction = "cubic-bezier(.48,1.65,1,1)";
+				saber.style.webkitAnimationDuration = "2s";
+				saber1.style.webkitAnimationTimingFunction = "cubic-bezier(.48,1.65,1,1)";
+				saber1.style.webkitAnimationDuration = "2s";
+			}, 6000);
+			setTimeout(function () {
+				saber1.style.display = "none";
+				sp1.style.display = "block";
+				logo1.style.display = "block";
+				saber.style.animationName = "clip";
+				saber.style.animationTimingFunction = "ease-in";
+				saber.style.animationDuration = "2s";
+
+				saber.style.webkitAnimationName = "clip";
+				saber.style.webkitAnimationTimingFunction = "ease-in";
+				saber.style.webkitAnimationDuration = "2s";
+			}, 8000);
+			setTimeout(function () {
+				saber.style.display = "none";
+				sp1.style.display = "none";
+			}, 9980);
+			card.style.animation = "fade 2s ease-in-out 1";
+			card.style.webkitAnimation = "fade 2s ease-in-out 1";
+		}
+	</script>
+</body>
+
+</html>
