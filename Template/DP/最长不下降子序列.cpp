@@ -4,10 +4,9 @@
 using namespace std;
 #define N 100
  
-int d[N], c[N], a[N], len = 1;
- 
 int main() {
-    int n; scanf("%d", &n);
+    int d[N], c[N], a[N], len = 1, n;
+    scanf("%d", &n);
     for (int i = 1; i <= n; ++ i)
         scanf("%d", &a[i]);
  
@@ -24,9 +23,8 @@ int main() {
     // 输出
     stack<int> sta;
     for (int i = n, j = len; i >= 1; -- i) {
-        if (c[i] == j) {
-            sta.push(a[i]); --j;
-        }
+        if (c[i] == j)
+            sta.push(a[i]), --j;
         if (j == 0) break;
     }
  
