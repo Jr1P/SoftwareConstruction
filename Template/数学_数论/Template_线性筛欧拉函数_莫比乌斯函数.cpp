@@ -6,7 +6,7 @@ int phi[N], mu[N];
 int tot, n, m;
 
 int main() {
-	freopen("output.txt", "w", stdout);
+	// freopen("output.txt", "w", stdout);
 	scanf("%d", &n);
 	phi[1] = 1;
 	check[1] = true;
@@ -29,6 +29,6 @@ int main() {
 		}
 	}
 	for (int i = 1; i <= 100; i++)
-		printf("%d\n", phi[i]);
+		printf("%d\n", i - phi[i]);
 	return 0;
 }

@@ -61,13 +61,10 @@ int hungarian() {
 int main() {
     while(~scanf("%d%d", &n, &m)) {
         for(int i = 1; i <= n; i++) G[i].clear();
-        for(int i = 1; i <= n; i++) {
-            int num, v;
-            scanf("%d", &num);
-            for(int j = 1; j <= num; j++) {
-                scanf("%d", &v);
-                G[i].push_back(v + n);
-            }
+        for(int i = 1; i <= m; i++) {
+            int u, v; 
+            scanf("%d%d", &u, &v);
+            G[u].push_back(v + n);
         }
         printf("%d\n", hungarian());
     }

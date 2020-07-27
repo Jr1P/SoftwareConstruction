@@ -83,9 +83,9 @@ int main() {
         db x, y;
         scanf("%lf%lf", &x, &y);
         po[i].x = x, po[i].y = y;
-        if(cmp(y, lowy) == -1) lowp = i, lowy = y;
+        if(cmp(y, lowy) == -1) lowp = i, lowy = y; // 找到y坐标最小点
     }
-    for(int i = 1; i <= n; i++) {
+    for(int i = 1; i <= n; i++) { // 移动坐标系
         if(i == lowp) continue;
         po[i].x -= po[lowp].x;
         po[i].y -= po[lowp].y;
