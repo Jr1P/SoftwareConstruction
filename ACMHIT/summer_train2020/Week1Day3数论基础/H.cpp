@@ -18,7 +18,6 @@ ll pow(ll a, ll b) {
 ll C(ll n, ll m) {
     ll ans = 1;
     if(n < m || n < 0 || m < 0) return 0;
-    // if(n % mod == 0 || m == 0) return 1;
     for(ll i = n; i >= n - m + 1; i--)
         ans = ans * (i % mod) % mod;
     return ans * pow(frac[m], mod - 2) % mod;

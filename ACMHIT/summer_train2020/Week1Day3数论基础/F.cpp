@@ -3,17 +3,17 @@ typedef long long ll;
 const ll mod = 1e9 + 9;
 const int K = 1e5 + 5;
 
-ll exgcd(ll a, ll b, ll &x, ll &y) {
-    if(!b) {
-        x = 1L; y = 0L;
-        return a;
-    }
-    ll gcd = exgcd(b, a % b, x, y);
-    ll tmp = y;
-    y = x - a / b * y;
-    x = tmp;
-    return gcd;
-}
+// ll exgcd(ll a, ll b, ll &x, ll &y) {
+//     if(!b) {
+//         x = 1L; y = 0L;
+//         return a;
+//     }
+//     ll gcd = exgcd(b, a % b, x, y);
+//     ll tmp = y;
+//     y = x - a / b * y;
+//     x = tmp;
+//     return gcd;
+// }
 
 inline ll pow(ll a, ll b) {
     ll ans = 1ll;
@@ -25,9 +25,9 @@ inline ll pow(ll a, ll b) {
 }
 
 ll inv(ll x) {
-    ll x0, y0;
-    ll gcd = exgcd(x, mod, x0, y0);
-    return x0;
+    // ll x0, y0;
+    // ll gcd = exgcd(x, mod, x0, y0);
+    return pow(x, mod - 2);
 }
 
 int main() {
@@ -43,7 +43,7 @@ int main() {
     if(m == 1)
         ans = sum * (n + 1) / k % mod;
     else
-        ans = (sum * (pow(m, (n + 1) / k) - 1) % mod * inv(m - 1) % mod + mod )% mod;
+        ans = (sum * (pow(m, (n + 1) / k) - 1) % mod * inv(m - 1) % mod + mod) % mod;
     printf("%lld\n", ans);
     return 0;
 }
