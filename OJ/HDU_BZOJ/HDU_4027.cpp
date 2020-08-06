@@ -35,8 +35,7 @@ void build(int l, int r, int k) {
 }
 
 void fire(int k) {
-    if(node[k]._max == 1L)
-        return ;
+    if(node[k]._max == 1L) return ;
     if(node[k].l == node[k].r) {
         node[k].sum = (ll)(sqrt(node[k].sum));
         node[k]._max = node[k].sum;

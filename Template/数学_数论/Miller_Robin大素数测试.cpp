@@ -40,11 +40,8 @@ bool Miller_Robin(ll n, int S) {
 }
 
 int main() {
-    int cnt = 0;
-    // for(ll i = 3; i <= 10007; i++)
     ll i = 1e9 + 9;
     if(Miller_Robin(i, 50))
-        printf("%d\n", i), cnt++;
-    // printf("%d\n", cnt);
+        printf("%d\n", i);
     return 0;
 }

@@ -1,3 +1,4 @@
+// luogu3369 AC板子
 #include <cstdio>
 #define ls(x) ch[x][0]
 #define rs(x) ch[x][1]
@@ -5,7 +6,7 @@
 
 const int N = 1e5 + 5;
 int siz, rt; // rt根节点, siz为当前节点个数
-int sz[N], dup[N], ch[N][2], key[N], fa[N]; // sz 为子树大小，不包括自身
+int sz[N], dup[N], ch[N][2], key[N], fa[N]; // sz 为子树大小，包括自身
 
 inline void clear(int x) { 
     sz[x] = dup[x] = key[x] = fa[x] = ch[x][0] = ch[x][1] = 0;
@@ -31,9 +32,9 @@ void rotate(int x) { // 旋转, f-father, gfa-grandpa
     update(f); update(x);
 }
 
-void splay(int x) { // 把x旋转到根, 要转到特定位置稍微改改
+void splay(int x, int p) { // 把x旋转到根, 要转到特定位置稍微改改
     for(int f; f = fa[x]; rotate(x))
-        if(fa[f]) rotate(isRight(x) == isRight(f) ? f : x);
+        if(fa[f] != p) rotate(isRight(x) == isRight(f) ? f : x);
     rt = x;
 }
 
@@ -47,7 +48,7 @@ int queryRank(int x) { // 根据关键字值查询排名
             now = rs(now);
         } else {
             ans += sz[ls(now)] + 1;
-            splay(now);
+            splay(now, 0);
             return ans;
         }
     }
@@ -59,7 +60,7 @@ int queryKey(int rank) { // k-th number
         if(rank <= sz[ls(now)])
             now = ls(now);
         else if(rank <= sz[ls(now)] + dup[now]) {
-            splay(now);
+            splay(now, 0);
             return key[now];
         } else {
             rank -= sz[ls(now)] + dup[now];
@@ -68,7 +69,7 @@ int queryKey(int rank) { // k-th number
     }
 }
 
-void insert(int x) { // 插入关键字x, 返回插入节点编号
+void insert(int x) { // 插入关键字x
     if(!rt) { // 树中还没有节点
         rt = ++siz;
         key[rt] = x;
@@ -82,7 +83,7 @@ void insert(int x) { // 插入关键字x, 返回插入节点编号
         if(key[now] == x) {
             dup[now]++;
             update(now); update(f);
-            splay(now);
+            splay(now, 0);
             return ;
         }
         f = now; now = ch[now][x > key[now]];
@@ -92,7 +93,7 @@ void insert(int x) { // 插入关键字x, 返回插入节点编号
             fa[siz] = f;
             ch[f][x > key[f]] = siz;
             update(f);
-            splay(siz);
+            splay(siz, 0);
             return ;
         }
     }
@@ -132,7 +133,7 @@ void del(int x) { // 删除关键字 x
         return ;
     }
     int tmp = rt, left = pre();
-    splay(left);
+    splay(left, 0);
     connect(rs(tmp), rt, 1);
     clear(tmp);
     update(rt);

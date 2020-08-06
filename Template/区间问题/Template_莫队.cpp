@@ -51,9 +51,9 @@ int main() {
             color[i] = a[i];
         }
 		std::sort(a + 1, a + n + 1);
-        size = unique(a + 1, a + n + 1) - (a + 1);
+        size = std::unique(a + 1, a + n + 1) - (a + 1);
         for(int i = 1; i <= n; i++)
-            color[i] = lower_bound(a + 1, a + size + 1, color[i]) - a;
+            color[i] = std::lower_bound(a + 1, a + size + 1, color[i]) - a;
         for(int i = 1; i <= m; i++) {
             scanf("%d%d", &q[i].l, &q[i].r);
             q[i].ID = i;

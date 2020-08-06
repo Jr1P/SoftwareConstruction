@@ -1,5 +1,5 @@
+// luogu3369 AC板子
 #include <cstdio>
-#include <cstdlib>
 #define INF 2147483647
 
 inline int Rand() {
@@ -23,9 +23,7 @@ struct Node {
         sz = dup + ch[0]->sz + ch[1]->sz;
     }
 
-} *null = new Node(), *root = null;
-
-//Node* null = new Node();
+} *nil = new Node(), *root = nil;
 
 inline int read() {
     int x = 0;
@@ -40,7 +38,7 @@ inline int read() {
     	x = (x << 3) + (x << 1) + (c ^ 48);
     	c = getchar();
     }
-    return flag? -x: x;
+    return flag ? -x: x;
 }
 
 //0左旋, 1右旋
@@ -56,9 +54,9 @@ inline void rotate(Node* &node, int d) {
 //插入操作
 void insert(Node* &root, int val) {
 //根为null，则直接创建此结点为根结点
-    if (root == null) {
+    if (root == nil) {
         root = new Node(val);
-        root->ch[0] = root->ch[1] = null;
+        root->ch[0] = root->ch[1] = nil;
         return ;
     }
     int d = root->cmp(val);
@@ -72,15 +70,15 @@ void insert(Node* &root, int val) {
 }
 //删除结点操作
 void del(Node* &root, int val) {
-    if(root == null) return ;
+    if(root == nil) return ;
     int d = root->cmp(val);
     if(d == -1) {
         if(root->dup > 1) {
             root->dup--;
             root->pushup();
         } else {
-            if(root->ch[0] == null) root = root->ch[1];
-            else if(root->ch[1] == null) root = root->ch[0];
+            if(root->ch[0] == nil) root = root->ch[1];
+            else if(root->ch[1] == nil) root = root->ch[0];
             else {
                 if(root->ch[0]->pr > root->ch[1]->pr)
                     rotate(root, 1), del(root->ch[1], val);
@@ -95,7 +93,7 @@ void del(Node* &root, int val) {
 }
 
 inline int Kth(Node* root, int k) {
-    if(root == null) return INF;
+    if(root == nil) return INF;
     if(k <= root->ch[0]->sz)
         return Kth(root->ch[0], k);
     if(k <= root->ch[0]->sz + root->dup)
@@ -104,7 +102,7 @@ inline int Kth(Node* root, int k) {
 }
 
 inline int Rank(Node* root, int val) {
-    if(root == null) return 0;
+    if(root == nil) return 0;
     int d = root->cmp(val);
     if(d == -1)
         return root->ch[0]->sz + 1;
@@ -114,7 +112,7 @@ inline int Rank(Node* root, int val) {
 inline int pre(int val) {
     Node* id = root;
     int p;
-    while(id != null) {
+    while(id != nil) {
         if(id->val < val)
             p = id->val, id = id->ch[1];
         else id = id->ch[0];
@@ -125,7 +123,7 @@ inline int pre(int val) {
 inline int nxt(int val) {
     Node* id = root;
     int next;
-    while(id != null) {
+    while(id != nil) {
         if(id->val > val)
             next = id->val, id = id->ch[0];
         else id = id->ch[1];

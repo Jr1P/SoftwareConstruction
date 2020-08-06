@@ -23,8 +23,7 @@ int main() {
     // 输出
     stack<int> sta;
     for (int i = n, j = len; i >= 1; -- i) {
-        if (c[i] == j)
-            sta.push(a[i]), --j;
+        if (c[i] == j) sta.push(a[i]), --j;
         if (j == 0) break;
     }
  

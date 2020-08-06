@@ -1,95 +1,88 @@
 #include <cstdio>
 #include <queue>
-#include <algorithm>
 #include <cstring>
-#include <cstdlib>
-using namespace std;
-#define N 120
-#define M 5500
+#include <vector>
+typedef long long ll;
+const int INF = 0x1fffffff;
+const int N = 110;
+// #define M 5500
 
 int n, m;
-int gcd[N][N], lcm[N][N], val[N], gg[N], ll[N];
-bool g[N][N], vis[N], f = true;
+ll gcd[N][N], lcm[N][N], val[N], l[N], r[N];
+bool vis[N];
 
-inline int _gcd(int a, int b) {
-	return a%b == 0? b: _gcd(b, a%b);
+std::vector<int > G[N];
+
+inline ll _gcd(ll a, ll b) {
+	return a % b == 0 ? b : _gcd(b, a % b);
 }
 
-queue<int > q;
+std::queue<int > q;
 
-void bfs(int x) {
+bool bfs(int x) {
 	while(!q.empty()) q.pop();
 	q.push(x);
+	vis[x] = true;
 	while(!q.empty()) {
-		int u = q.front();
-		q.pop();
-		for(int v = 1; v <= n; v++) {
-			int vv = gcd[u][v]*lcm[u][v]/val[u];
-			if(!g[u][v]) continue;
+		int u = q.front(); q.pop();
+		for(int v : G[u]) {
+			ll vv;
+			if(gcd[u][v] * lcm[u][v] % val[u]) return false;
+			vv = gcd[u][v] * lcm[u][v] / val[u];
 			if(!vis[v]) {
+				vis[v] = true;
 				q.push(v);
 				val[v] = vv;
-			} else if(val[v] == vv)
 				continue;
-			else {
-				f = false;
-				return ;
 			}
+			if(val[v] != vv || _gcd(val[v], val[u]) != gcd[u][v]) return false;
 		}
 	}
-	f = true;
-	//printf("YES\n");
-	//for(int i = 1; i < n; i++)
-	//	printf("%lld ", val[i]);
-	//printf("%lld\n", val[n]);
-	//exit(0);
+	return true;
 }
 
 int main() {
 	scanf("%d%d", &n, &m);
 	if(m == 0) {
 		printf("YES\n");
-		for(int i = 1; i <= n; i++)
-			printf("1 ");
+		for(int i = 1; i <= n; i++) printf("1 ");
 		return 0;
 	}
+	for(int i = 1; i <= n; i++) l[i] = 0, r[i] = INF;
 	for(int i = 1; i <= m; i++) {
-		int _l, _g;
+		ll lc, g;
 		int u, v;
-		scanf("%d%d%d%d", &u, &v, &_g, &_l);
-		lcm[u][v] = lcm[v][u] = _l;
-		gcd[u][v] = gcd[v][u] = _g;
-		if(_gcd(_l, _g) != _g) {
+		scanf("%d%d%lld%lld", &u, &v, &g, &lc);
+		lcm[u][v] = lcm[v][u] = lc;
+		gcd[u][v] = gcd[v][u] = g;
+		if(_gcd(lc, g) != g) {
 			printf("NO\n");
 			return 0;
 		}
-		g[u][v] = 1; g[v][u] = 1;
-		gg[u] = gg[v] = _g; ll[u] = ll[v] = _l;
+		G[u].push_back(v); G[v].push_back(u);
+		l[u] = std::max(g, l[u]);
+		l[v] = std::max(g, l[v]);
+		r[u] = std::min(r[u], lc);
+		r[v] = std::min(r[v], lc);
 	}
 	for(int i = 1; i <= n; i++) {
-		if (!vis[i])
-		for(int j = gg[i]; j*j <= gg[i]*ll[i]; j++) {
-			if (gg[i]*ll[i] % j == 0) {
-				//memset(val, 0, sizeof(val));
-				memset(vis, 0, sizeof(vis));
-				val[i] = j;
-				bfs(i);
-				if(f) break;
-				//memset(val, 0, sizeof(val));
-				memset(vis, 0, sizeof(vis));
-				val[i] = gg[i]*ll[i]/j;
-				bfs(i);
+		bool f;
+		if (!vis[i] && l[i] && r[i]) {
+			for(ll j = l[i]; j <= r[i]; j++)
+				if (l[i] * r[i] % j == 0) {
+					memset(vis, 0, sizeof(vis));
+					val[i] = j;
+					f = bfs(i);
+					if(f) break;
+				}
+			if (!f) {
+				printf("NO\n");
+				return 0;
 			}
 		}
-		if (!f) {
-			printf("NO\n");
-			return 0;
-		}
 	}
-	for(int i = 1; i <= n; i++) {
-		if (val[i] == 0)
-			val[i] = 1;
-		printf("%d\n", val[i]);
-	}
+	puts("YES");
+	for(int i = 1; i <= n; i++)
+		printf("%lld ", val[i] == 0 ? 1 : val[i]);
 	return 0;
 }
