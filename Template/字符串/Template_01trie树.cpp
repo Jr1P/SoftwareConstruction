@@ -1,16 +1,19 @@
 #include <cstdio>
-#define N 100050
+#include <unordered_map>
+const int N = 1e5 + 50;
 typedef long long ll;
 
 int trie[N << 5][2];
-ll val[N << 5];
 int root, n, m, tot, t;
+std::unordered_map<ll, ll> val;
 
 void insert(ll a, int root = 0) {
 	for(int i = 32; i >= 0; i--) {
 		ll v = (a >> i) & 1;
-		if(!trie[root][v])
+		if(!trie[root][v]) {
 			trie[root][v] = ++tot;
+			trie[tot][0] = trie[tot][1] = 0;
+		}
 		root = trie[root][v];
 	}
 	val[root] = a;
@@ -31,10 +34,8 @@ int main() {
 	scanf("%d", &t);
 	while(t--) {
 		scanf("%d%d", &n, &m);
-		for(int i = 1; i <= (n << 5); i++) {
-			trie[i][0] = trie[i][1] = 0;
-			val[i] = 0L;
-		}
+		tot = 0;
+		trie[0][0] = trie[0][1] = 0;
 		for(int i = 0; i < n; i++) {
 			ll a;
 			scanf("%lld", &a);
