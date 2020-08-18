@@ -32,8 +32,7 @@ int hungarian() {
     for (int i = 1; i <= n*m; i++) {
         if (match[i] == -1) {
             memset(check, false, sizeof(check));
-            if (dfs(i))
-                ans++;
+            if (dfs(i)) ans++;
         }
     }
     return ans;

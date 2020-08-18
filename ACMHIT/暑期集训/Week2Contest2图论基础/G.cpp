@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <queue>
 using namespace std;
-#define N 250050
+#define N 2000500
 const long long INF = 0x7fffffffffffffff;
 
 typedef long long ll;

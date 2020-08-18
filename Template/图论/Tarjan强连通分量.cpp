@@ -1,15 +1,18 @@
+// 板子 lg2863 AC
 #include <cstdio>
 #include <iostream>
 #include <vector>
 #include <algorithm>
-using namespace std;
 #define N 10010
 
-vector<int > g[N];
+std::vector<int > g[N];
 
 bool vis[N], iscut[N];
 int stack[N << 1], dfn[N << 1], low[N << 1], color[N], cnt[N];
 int n, m, sum = 0, ans = 0, top = 0, tim = 0;
+
+inline int max(int x, int y) { return x > y ? x : y; }
+inline int min(int x, int y) { return x < y ? x : y; }
 
 void tarjan(int u) {
 	dfn[u] = low[u] = ++tim;
@@ -21,10 +24,7 @@ void tarjan(int u) {
 		if(!dfn[v]) {
 			tarjan(v);
 			low[u] = min(low[u], low[v]);
-		} else {
-			if(vis[v])
-				low[u] = min(low[u], dfn[v]);
-		}
+		} else if(vis[v]) low[u] = min(low[u], dfn[v]);
 	}
 	if(dfn[u] == low[u]) {
 		color[u] = ++sum;
@@ -37,9 +37,6 @@ void tarjan(int u) {
 	}
 }
 
-inline int max(int x, int y) { return x > y ? x : y; }
-inline int min(int x, int y) { return x < y ? x : y; }
-
 /*void Tarjan(int u, int fa) { // 割点
     low[u] = dfn[u] = ++tim;
     int sz = g[u].size(), child = 0;
@@ -51,8 +48,7 @@ inline int min(int x, int y) { return x < y ? x : y; }
             if(low[v] >= dfn[u] && u != fa) iscut[u] = true;
 			// if(low[v] > dfn[u]) u - v 是桥
             if(u == fa) child++;
-        } else
-            low[u] = min(low[u], dfn[v]);
+        } else low[u] = min(low[u], dfn[v]);
     }
     if(fa == u && child >= 2) iscut[u] = true;
 }*/
@@ -65,13 +61,11 @@ int main() {
 		g[u].push_back(v);
 	}
 	for(int i = 1; i <= n; ++i)
-		if(!dfn[i])
-			tarjan(i);
+		if(!dfn[i]) tarjan(i);
 	for(int i = 1; i <= n; i++)
 		cnt[color[i]]++;
 	for(int i = 1; i <= sum; i++)
-		if (cnt[i] > 1)
-			ans++;
+		if(cnt[i] > 1) ans++;
 	printf("%d\n", ans);
 	return 0;
 }

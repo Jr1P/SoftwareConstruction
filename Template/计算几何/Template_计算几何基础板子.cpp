@@ -2,7 +2,6 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
-using namespace std;
 #define eps 1e-9
 #define INF 2147483647.00
 #define Vector P
@@ -26,27 +25,19 @@ struct P {
     P operator / (db d) { return {x/d, y/d}; }
 
     inline db alpha() { return atan2(y, x); }
-    inline db dot(P p) { return x*p.x + y*p.y; }
-    inline db cross(P p) { return x*p.y - y*p.x; }
-    inline db abs() { return sqrt(x*x + y*y); }
-    inline db distTo(P p) { return (*this-p).abs(); }
-    inline P normalize() { return *this/abs(); }
+    inline db dot(P p) { return x*p.x + y*p.y; } // 点乘
+    inline db cross(P p) { return x*p.y - y*p.x; } // 叉积
+    inline db abs() { return sqrt(x*x + y*y); } // 向量模长
+    inline db distTo(P p) { return (*this-p).abs(); } // 两点间距离
+    inline P normalize() { return *this/abs(); } // 向量单位化
     inline P rot(db angle) { return {x*cos(angle) - y*sin(angle), x*sin(angle) + y*cos(angle)}; }
     inline bool operator < (const P& p) const {
         int c = cmp(x, p.x);
         if(c) return c == -1;
         return cmp(y, p.y) == -1;
     }
-    inline bool operator == (const P& p) const {
-        return cmp(x, p.x) == 0 && cmp(y, p.y) == 0;
-    }
+    inline bool operator == (const P& p) const { return cmp(x, p.x) == 0 && cmp(y, p.y) == 0; }
 };
-
-inline void _swap(P& a, P& b) {
-    P tmp = a;
-    a = b;
-    b = tmp;
-}
 
 inline bool cmp1(P a, P b) {
     int c = cmp(atan2(a.y, a.x), atan2(b.y, b.x));
@@ -88,12 +79,12 @@ inline db disToLine(Pabc) {
 
 inline bool isLeft(Pabc) {
     Vector ab(b-a), bc(c-b);
-    return cmp(ab.cross(bc), 0) > 0;
+    return sign(ab.cross(bc)) > 0;
 } // 判断折线bc是否在折线ab的左侧, 即是否在ab的逆时针方向
 
 inline bool intersect(db l1, db r1, db l2, db r2) {
-    if(cmp(l1, r1) == 1) swap(l1, r1);
-    if(cmp(l2, r2) == 1) swap(l2 ,r2);
+    if(cmp(l1, r1) == 1) std::swap(l1, r1);
+    if(cmp(l2, r2) == 1) std::swap(l2 ,r2);
     return !(cmp(r1, l2) == -1 || cmp(r2, l1) == -1);
 }
 
@@ -101,7 +92,7 @@ inline bool isSS(P4) {
     return intersect(p1.x, p2.x, q1.x, q2.x) && intersect(p1.y, p2.y, q1.y, q2.y) &&
     crossOp(p1, p2, q1)*crossOp(p1, p2, q2) <= 0 &&
     crossOp(q1, q2, p1)*crossOp(q1, q2, p2) <= 0;
-} // 判断线段是否非严格相交
+} // 判断线段是否非严格相交，端点相交也算
 
 inline bool isMiddle(db a, db b, db c) {
     return sign(a-c) == 0 || sign(b-c) == 0 || (cmp(a, c) != cmp(b, c));
@@ -132,10 +123,43 @@ inline db disSS(P4) {
     return min(min(nearest(p1, p2, q1), nearest(p1, p2, q2)), min(nearest(q1, q2, p1), nearest(q1, q2, p2)));
 } // 返回线段p1p2 q1q2的距离
 
+/***
+ * 圆相关
+ * */
+struct Circle {
+    P O;
+    db r;
+    Circle() {}
+    Circle(P p, db r) : O(p), r(r) {}
+
+    inline db dist(P p) { return O.distTo(p); } // 点与圆心的距离
+    inline int rel(P p) {
+        db dst = dist(p)-r;
+        if(sign(dst) < 0) return 2;
+        if(sign(dst) == 0) return 1;
+        return 0;
+    } // 判断点p与圆的关系, 0:outside, 1:on, 2:inside
+    inline int reline(P a, P b) {
+        db dst = disToLine(a, b, O)-r;
+        if(sign(dst) < 0) return 2;
+        if(sign(dst) == 0) return 1;
+        return 0;
+    } // 判断直线ab与圆的关系(看起来像是和向量的关系，稍微改改能改成线段), 2:相交, 1:相切
+    inline Vector cut(P a) {
+        if(rel(a) == 1) {
+            Vector ao(O-a);
+            return ao.rot(90.0);
+        } // 在圆上
+        db dst = dist(a);
+        Vector ao(O-a);
+        return ao.rot(asin(r/dst));
+    } // 过a点做圆的切线, 返回切线
+};
+
 int n, lowp, q, top;
 int stk[10050];
 db lowy = INF, lowx;
-vector<P> poly;
+std::vector<P> poly;
 
 db Polyarea() {
     db S = 0.0;
@@ -150,7 +174,7 @@ int contain(P p) {
     for(int i = 0; i < n; i++) {
         P u = poly[i], v = poly[(i+1)%n];
         if(onSeg(u, v, p)) return 1;
-        if(cmp(u.y, v.y) <= 0) swap(u, v);
+        if(cmp(u.y, v.y) <= 0) std::swap(u, v);
         if(cmp(p.y, u.y) > 0 || cmp(p.y, v.y) <= 0) continue;
         res ^= crossOp(p, u, v) > 0;
     }
@@ -171,6 +195,22 @@ db Graham() {
     return ans;
 } //返回凸包的周长
 
+P Gray() { // 求多边形重心
+    int n = poly.size();
+    P u = poly[0], v, g;
+    g.x = 0, g.y = 0;
+    double S = 0.0, tmp;
+    for(int i = 1; i <= n; i++) {
+        v = poly[i%n];
+        tmp = u.cross(v);
+        S += tmp*0.5;
+        g = g+(u+v)*tmp;
+        u = v;
+    }
+    g = g/(S*6);
+    return g;
+}
+
 int main() {
     scanf("%d", &n);
     for(int i = 0; i < n; i++) {
@@ -186,7 +226,7 @@ int main() {
         poly[i].y -= poly[lowp].y;
     }
     poly[lowp].x = 0; poly[lowp].y = 0;
-    //_swap(lowp, 1);
+    //std::swap(lowp, 1);
     sort(poly.begin(), poly.end(), cmp1);
     printf("%.2f\n", Graham());
     return 0;
